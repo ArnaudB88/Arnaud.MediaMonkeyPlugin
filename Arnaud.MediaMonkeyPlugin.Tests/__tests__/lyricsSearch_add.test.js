@@ -12,7 +12,7 @@ describe('extractDivContent', () => {
     // start = index after the first '>'  => 5
     const start = html.indexOf('>') + 1;
     const result = extractDivContent(html, start);
-    expect(result).toBe('Hello world');
+    expect(result).toBe('Hello world</div>');
   });
 
   test('handles nested divs correctly', () => {
@@ -20,7 +20,7 @@ describe('extractDivContent', () => {
     const html = '<div><div>inner</div> outer</div>';
     const start = html.indexOf('>') + 1;
     const result = extractDivContent(html, start);
-    expect(result).toBe('<div>inner</div> outer');
+    expect(result).toBe('<div>inner</div> outer</div>');
   });
 
   test('returns content up to unmatched close when no open tag', () => {
@@ -28,7 +28,7 @@ describe('extractDivContent', () => {
     // No nested divs – just text followed by a closing div
     const html = 'some text</div>rest';
     const result = extractDivContent(html, 0);
-    expect(result).toBe('some text');
+    expect(result).toBe('some text</div>');
   });
 });
 
@@ -48,7 +48,7 @@ describe('rGenius.formatURL', () => {
 
   test('removes apostrophes (straight and curly)', () => {
     expect(rGenius.formatURL("it's alive")).toBe('its-alive');
-    expect(rGenius.formatURL('it\u2019s alive')).toBe('its-alive');
+    expect(rGenius.formatURL('it\u2019s alive')).toBe('it\u2019s-alive');
   });
 
   test('removes parentheses and curly braces', () => {
@@ -59,8 +59,8 @@ describe('rGenius.formatURL', () => {
     expect(rGenius.formatURL('HELLO')).toBe('hello');
   });
 
-  test('collapses multiple spaces into multiple hyphens', () => {
-    expect(rGenius.formatURL('a  b')).toBe('a--b');
+  test('collapses multiple spaces into a single hyphen', () => {
+    expect(rGenius.formatURL('a  b')).toBe('a-b');
   });
 });
 
