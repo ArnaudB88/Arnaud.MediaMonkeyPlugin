@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.5171056">
+  <PropertyGroup>
+	<ProjectGuid>{A1B2C3D4-0001-0001-0001-000000000001}</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<Content Include="helpers\lyricsSearch_add.js" />
+	<Content Include="info.json" />
+	<Content Include="package.json" />
+  </ItemGroup>
+</Project>

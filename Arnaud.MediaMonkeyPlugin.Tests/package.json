@@ -1,0 +1,11 @@
+{
+  "name": "arnaud-mediamonkeyplugin-tests",
+  "version": "1.0.0",
+  "description": "Unit tests for lyricsSearch_add.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

@@ -1,1 +1,15 @@
-<Solution />
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="Arnaud.GeniusLyrics.v1.0.0.mmip" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="Arnaud.MediaMonkeyPlugin.GeniusLyrics\Arnaud.MediaMonkeyPlugin.GeniusLyrics.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="Arnaud.MediaMonkeyPlugin.Tests\Arnaud.MediaMonkeyPlugin.Tests.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+</Solution>
