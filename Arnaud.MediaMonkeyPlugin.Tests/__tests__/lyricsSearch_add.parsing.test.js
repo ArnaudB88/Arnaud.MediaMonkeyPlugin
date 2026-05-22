@@ -6,7 +6,7 @@ const https = require('https');
 const { load } = require('./moduleLoader');
 
 const GENIUS_URL = 'https://genius.com/August-burns-red-martyr-lyrics';
-const FIXTURE_PATH = path.resolve(__dirname, 'August-burns-red-martyr-lyrics.html');
+const FIXTURE_PATH = path.resolve(__dirname, '../resources/August-burns-red-martyr-lyrics.html');
 
 /**
  * Fetches the raw HTML of a URL, following up to one redirect.
@@ -89,7 +89,7 @@ describe('rGenius.onSuccess – real Genius.com HTML (August Burns Red – Marty
 
   test('parses all lyric sections from the Genius page', () => {
     const expectedLyrics = fs
-      .readFileSync(path.resolve(__dirname, 'August-burns-red-martyr-lyrics.txt'), 'utf8')
+      .readFileSync(path.resolve(__dirname, '../resources/August-burns-red-martyr-lyrics.txt'), 'utf8')
       .replace(/\r\n/g, '\n')
       .trim();
 
