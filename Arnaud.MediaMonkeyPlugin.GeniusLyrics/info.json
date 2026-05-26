@@ -1,8 +1,8 @@
 {
-    "title": "LyricSource Genius",
-    "description": "Genius lyricsource",
-    "id":"arnaud-lyricSource-genius",
+    "title": "LyricsSource Genius",
+    "description": "Lyrics source for Genius.com webiste",
+    "id":"arnaud-lyricsSource-genius",
     "type": "metadata",
     "author": "arnaud",
-    "version": "1.0.0"
+    "version": "1.0.1"
 }

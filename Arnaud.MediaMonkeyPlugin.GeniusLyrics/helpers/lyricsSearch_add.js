@@ -66,7 +66,9 @@ rGenius.onFailure = function (err) {
 rGenius.host = 'https://genius.com/%artist%-%title%-lyrics';
 rGenius.sendString = '';
 rGenius.name = 'Genius';
-rGenius.formatURL = function (host) {
-    return host.replace(/\s+/g, '-').replace(/\'+/g, '').replace(/[{()}]/g, '').replace(/'/g, '').toLowerCase();
+var formatGeniusSegment = function (s) {
+    return s.replaceAll(/\s+/g, '-').replaceAll(/\'+/g, '').replaceAll(/'/g, '').replaceAll(/[{()}$?.]/g, '').toLowerCase();
 };
+rGenius.formatArtist = formatGeniusSegment;
+rGenius.formatTitle = formatGeniusSegment;
 window.lyricsSources.unshift(rGenius);

@@ -5,11 +5,11 @@ Plugins for MediaMonkey
 A lyrics plugin for MediaMonkey that fetches lyrics from Genius.com.
 
 ### Build
-- Zip the contents of the `Arnaud.MediaMonkeyPlugin` folder (not the folder itself):
-  - helpers folder
-  - info.json file 
-- Rename the zip to `Arnaud.GeniusLyrics.vx.y.z.zip`.
-- Change the extention to `.mmip`
+Run `build.ps1` from solution root:
+```powershell
+.\build.ps1
+```
+Reads version from `info.json`, packages `helpers` folder + `info.json`, outputs `Arnaud.GeniusLyrics.vx.y.z.mmip` at solution root.
 
 ### Install
 - Double click the `Arnaud.GeniusLyrics.mmip` file and follow the installation instructions.

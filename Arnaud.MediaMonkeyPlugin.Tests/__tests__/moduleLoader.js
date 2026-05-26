@@ -50,6 +50,8 @@ function load(overrides = {}) {
     rGenius: fakeWindow.lyricsSources[0],
     /** extractDivContent exposed from the context */
     extractDivContent: context.extractDivContent,
+    /** formatGeniusSegment exposed from the context */
+    formatGeniusSegment: context.formatGeniusSegment,
     /** The window stub (gives access to lyricsSources) */
     window: fakeWindow,
     /** The stubs so tests can assert on them */

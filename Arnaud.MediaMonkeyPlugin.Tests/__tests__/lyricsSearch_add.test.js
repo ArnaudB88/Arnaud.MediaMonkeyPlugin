@@ -33,34 +33,65 @@ describe('extractDivContent', () => {
 });
 
 // ---------------------------------------------------------------------------
-// formatURL
+// formatGeniusSegment
 // ---------------------------------------------------------------------------
-describe('rGenius.formatURL', () => {
+describe('formatGeniusSegment', () => {
+  let formatGeniusSegment;
+
+  beforeEach(() => {
+    ({ formatGeniusSegment } = load());
+  });
+
+  test('replaces spaces with hyphens', () => {
+    expect(formatGeniusSegment('Hello World')).toBe('hello-world');
+  });
+
+  test('removes apostrophes (straight and curly)', () => {
+    expect(formatGeniusSegment("it's alive")).toBe('its-alive');
+    expect(formatGeniusSegment('it\u2019s alive')).toBe('it\u2019s-alive');
+  });
+
+  test('removes parentheses and curly braces', () => {
+    expect(formatGeniusSegment('song (live) {version}')).toBe('song-live-version');
+  });
+
+  test('converts to lowercase', () => {
+    expect(formatGeniusSegment('HELLO')).toBe('hello');
+  });
+
+  test('collapses multiple spaces into a single hyphen', () => {
+    expect(formatGeniusSegment('a  b')).toBe('a-b');
+  });
+
+  test('removes periods from title (e.g. "Somebody else.")', () => {
+    expect(formatGeniusSegment('Somebody else.')).toBe('somebody-else');
+  });
+
+  test('removes dollar signs from title (e.g. "IDWT$")', () => {
+    expect(formatGeniusSegment('IDWT$')).toBe('idwt');
+  });
+
+  test('removes question marks from title (e.g. "Who are you?")', () => {
+    expect(formatGeniusSegment('Who are you?')).toBe('who-are-you');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// formatArtist / formatTitle
+// ---------------------------------------------------------------------------
+describe('rGenius.formatArtist / rGenius.formatTitle', () => {
   let rGenius;
 
   beforeEach(() => {
     ({ rGenius } = load());
   });
 
-  test('replaces spaces with hyphens', () => {
-    expect(rGenius.formatURL('Hello World')).toBe('hello-world');
+  test('formatArtist formats artist name', () => {
+    expect(rGenius.formatArtist('Bad Omens')).toBe('bad-omens');
   });
 
-  test('removes apostrophes (straight and curly)', () => {
-    expect(rGenius.formatURL("it's alive")).toBe('its-alive');
-    expect(rGenius.formatURL('it\u2019s alive')).toBe('it\u2019s-alive');
-  });
-
-  test('removes parentheses and curly braces', () => {
-    expect(rGenius.formatURL('song (live) {version}')).toBe('song-live-version');
-  });
-
-  test('converts to lowercase', () => {
-    expect(rGenius.formatURL('HELLO')).toBe('hello');
-  });
-
-  test('collapses multiple spaces into a single hyphen', () => {
-    expect(rGenius.formatURL('a  b')).toBe('a-b');
+  test('formatTitle formats song title', () => {
+    expect(rGenius.formatTitle('Somebody else.')).toBe('somebody-else');
   });
 });
 
