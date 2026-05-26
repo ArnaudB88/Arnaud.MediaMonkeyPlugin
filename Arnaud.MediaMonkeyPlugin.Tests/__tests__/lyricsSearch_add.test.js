@@ -74,6 +74,14 @@ describe('formatGeniusSegment', () => {
   test('removes question marks from title (e.g. "Who are you?")', () => {
     expect(formatGeniusSegment('Who are you?')).toBe('who-are-you');
   });
+
+  test('removes commas from title (e.g. "Good Mourning, America")', () => {
+    expect(formatGeniusSegment('Good Mourning, America')).toBe('good-mourning-america');
+  });
+
+  test('strips diacritics from title (e.g. "Nü Romantics")', () => {
+    expect(formatGeniusSegment('Nü Romantics')).toBe('nu-romantics');
+  });
 });
 
 // ---------------------------------------------------------------------------

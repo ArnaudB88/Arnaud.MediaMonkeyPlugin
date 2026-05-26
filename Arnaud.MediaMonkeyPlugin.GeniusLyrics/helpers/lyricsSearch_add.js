@@ -1,11 +1,11 @@
-var rGenius = new LyricsSource();
+let rGenius = new LyricsSource();
 
 function extractDivContent(html, start) {
-    var depth = 1;
-    var pos = start;
+    let depth = 1;
+    let pos = start;
     while (pos < html.length && depth > 0) {
-        var openIdx = html.indexOf('<div', pos);
-        var closeIdx = html.indexOf('</div>', pos);
+        let openIdx = html.indexOf('<div', pos);
+        let closeIdx = html.indexOf('</div>', pos);
         if (closeIdx === -1) break;
         if (openIdx !== -1 && openIdx < closeIdx) {
             depth++;
@@ -19,27 +19,27 @@ function extractDivContent(html, start) {
 }
 
 rGenius.onSuccess = function (html, xml) {
-    var l = '';
-    var p = '';
+    let l = '';
+    let p = '';
     try {
-        var marker = 'data-lyrics-container="true"';
-        var pos = 0;
-        var idx;
+        let marker = 'data-lyrics-container="true"';
+        let pos = 0;
+        let idx;
 
         while ((idx = html.indexOf(marker, pos)) !== -1) {
-            var start = html.indexOf('>', idx) + 1;
-            var chunk = extractDivContent(html, start);
+            let start = html.indexOf('>', idx) + 1;
+            let chunk = extractDivContent(html, start);
 
             // Verwijder SVG-elementen
-            chunk = chunk.replace(/<svg[\s\S]*?<\/svg>/gi, '');
+            chunk = chunk.replaceAll(/<svg[\s\S]*?<\/svg>/gi, '');
 
             // Witregel VOOR sectie-header, geen <br> erna
-            chunk = chunk.replace(/(\[[^\]]+\])/g, '<br><br>$1');
+            chunk = chunk.replaceAll(/(\[[^\]]+\])/g, '<br><br>$1');
 
             // Strip alle HTML-tags behalve <br>
-            chunk = chunk.replace(/<(?!br\s*\/?>)[^>]+>/gi, '');
+            chunk = chunk.replaceAll(/<(?!br\s*\/?>)[^>]+>/gi, '');
 
-            var trimmed = chunk.trim();
+            let trimmed = chunk.trim();
             if (trimmed.length > 5) {
                 l += trimmed + '<br><br>';
             }
@@ -47,7 +47,7 @@ rGenius.onSuccess = function (html, xml) {
         }
 
         // Strip alles vóór de eerste sectie-header
-        var firstHeader = l.indexOf('[');
+        let firstHeader = l.indexOf('[');
         if (firstHeader > 0) {
             l = l.substring(firstHeader);
         } else if (firstHeader === -1) {
@@ -69,9 +69,9 @@ rGenius.onFailure = function (err) {
 rGenius.host = 'https://genius.com/%artist%-%title%-lyrics';
 rGenius.sendString = '';
 rGenius.name = 'Genius';
-var formatGeniusSegment = function (s) {
-    return s.replaceAll(/\s+/g, '-').replaceAll(/\'+/g, '').replaceAll(/'/g, '').replaceAll(/[{()}$?.]/g, '').toLowerCase();
-};
+function formatGeniusSegment(s) {
+    return s.normalize('NFD').replaceAll(/[\u0300-\u036f]/g, '').replaceAll(/\s+/g, '-').replaceAll(/\'+/g, '').replaceAll(/[{()}$?.,]/g, '').toLowerCase();
+}
 rGenius.formatArtist = formatGeniusSegment;
 rGenius.formatTitle = formatGeniusSegment;
 window.lyricsSources.unshift(rGenius);
