@@ -1,8 +1,8 @@
 {
     "title": "LyricsSource Genius",
-    "description": "Lyrics source for Genius.com webiste",
+    "description": "Lyrics source for Genius.com website",
     "id":"arnaud-lyricsSource-genius",
     "type": "metadata",
-    "author": "arnaud",
+    "author": "ArnaudB88",
     "version": "1.0.3"
 }

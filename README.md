@@ -2,7 +2,7 @@
 Plugins for MediaMonkey
 
 ## Arnaud.MediaMonkeyPlugin.GeniusLyrics
-A lyrics plugin for MediaMonkey that fetches lyrics from Genius.com.
+A lyrics plugin for MediaMonkey that fetches lyrics from Genius[dot].com.
 
 ### Build
 Run `build.ps1` from solution root:
