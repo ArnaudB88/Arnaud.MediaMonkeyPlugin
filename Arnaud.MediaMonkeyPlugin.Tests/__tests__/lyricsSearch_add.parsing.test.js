@@ -5,8 +5,11 @@ const path = require('path');
 const https = require('https');
 const { load } = require('./moduleLoader');
 
-const GENIUS_URL = 'https://genius.com/August-burns-red-martyr-lyrics';
-const FIXTURE_PATH = path.resolve(__dirname, '../resources/August-burns-red-martyr-lyrics.html');
+const GENIUS_URL_AUGUST_BURNS_RED_MARTYR = 'https://genius.com/August-burns-red-martyr-lyrics';
+const FIXTURE_PATH_AUGUST_BURNS_RED_MARTYR = path.resolve(__dirname, '../resources/August-burns-red-martyr-lyrics.html');
+
+const GENIUS_URL_GUILT_TRIP_DUSK = 'https://genius.com/Guilt-trip-dusk-lyrics';
+const FIXTURE_PATH_GUILT_TRIP_DUSK = path.resolve(__dirname, '../resources/Guilt-trip-dusk.html');
 
 /**
  * Fetches the raw HTML of a URL, following up to one redirect.
@@ -42,12 +45,12 @@ function fetchHtml(url) {
  * Returns the HTML for the Genius page, using a local fixture cache when available.
  * Fetches from the network and saves the fixture on first run.
  */
-async function getHtml() {
-  if (fs.existsSync(FIXTURE_PATH)) {
-    return fs.readFileSync(FIXTURE_PATH, 'utf8');
+async function getHtml(url, fixturePath) {
+  if (fs.existsSync(fixturePath)) {
+    return fs.readFileSync(fixturePath, 'utf8');
   }
-  const html = await fetchHtml(GENIUS_URL);
-  fs.writeFileSync(FIXTURE_PATH, html, 'utf8');
+  const html = await fetchHtml(url);
+  fs.writeFileSync(fixturePath, html, 'utf8');
   return html;
 }
 
@@ -83,13 +86,34 @@ describe('rGenius.onSuccess – real Genius.com HTML (August Burns Red – Marty
   let lyrics;
 
   beforeAll(async () => {
-    const html = await getHtml();
+    const html = await getHtml(GENIUS_URL_AUGUST_BURNS_RED_MARTYR, FIXTURE_PATH_AUGUST_BURNS_RED_MARTYR);
     lyrics = parseLyrics(html);
   }, 30_000);
 
   test('parses all lyric sections from the Genius page', () => {
     const expectedLyrics = fs
       .readFileSync(path.resolve(__dirname, '../resources/August-burns-red-martyr-lyrics.txt'), 'utf8')
+      .replace(/\r\n/g, '\n')
+      .trim();
+
+    expect(lyrics).toBe(expectedLyrics);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Integration test – Genius.com HTML (cached fixture after first fetch)
+// ---------------------------------------------------------------------------
+describe('rGenius.onSuccess – real Genius.com HTML (Guilt Trip – Dusk)', () => {
+  let lyrics;
+
+  beforeAll(async () => {
+    const html = await getHtml(GENIUS_URL_GUILT_TRIP_DUSK, FIXTURE_PATH_GUILT_TRIP_DUSK);
+    lyrics = parseLyrics(html);
+  }, 30_000);
+
+  test('parses all lyric sections from the Genius page', () => {
+    const expectedLyrics = fs
+      .readFileSync(path.resolve(__dirname, '../resources/Guilt-trip-dusk.txt'), 'utf8')
       .replace(/\r\n/g, '\n')
       .trim();
 

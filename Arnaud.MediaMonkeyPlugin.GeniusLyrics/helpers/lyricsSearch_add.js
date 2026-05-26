@@ -50,6 +50,9 @@ rGenius.onSuccess = function (html, xml) {
         var firstHeader = l.indexOf('[');
         if (firstHeader > 0) {
             l = l.substring(firstHeader);
+        } else if (firstHeader === -1) {
+            // No section headers: strip Genius header preamble (e.g. "3 ContributorsDusk Lyrics")
+            l = l.replace(/^\d+\s*Contributors[\s\S]*?Lyrics/i, '');
         }
 
         l = cleanupLyrics(l);
