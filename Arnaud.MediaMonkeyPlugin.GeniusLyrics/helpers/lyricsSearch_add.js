@@ -70,7 +70,7 @@ rGenius.host = 'https://genius.com/%artist%-%title%-lyrics';
 rGenius.sendString = '';
 rGenius.name = 'Genius';
 function formatGeniusSegment(s) {
-    return s.normalize('NFD').replaceAll(/[\u0300-\u036f]/g, '').replaceAll(/\s+/g, '-').replaceAll(/\'+/g, '').replaceAll(/[{()}$?.,]/g, '').toLowerCase();
+    return s.normalize('NFD').replaceAll(/[\u0300-\u036f]/g, '').replaceAll(/\s+/g, '-').replaceAll(/['\u2018\u2019]+/g, '').replaceAll(/[{()}$?.,]/g, '').toLowerCase();
 }
 rGenius.formatArtist = formatGeniusSegment;
 rGenius.formatTitle = formatGeniusSegment;

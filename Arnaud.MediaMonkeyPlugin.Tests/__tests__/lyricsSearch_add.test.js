@@ -48,7 +48,7 @@ describe('formatGeniusSegment', () => {
 
   test('removes apostrophes (straight and curly)', () => {
     expect(formatGeniusSegment("it's alive")).toBe('its-alive');
-    expect(formatGeniusSegment('it\u2019s alive')).toBe('it\u2019s-alive');
+    expect(formatGeniusSegment('it\u2019s alive')).toBe('its-alive');
   });
 
   test('removes parentheses and curly braces', () => {
