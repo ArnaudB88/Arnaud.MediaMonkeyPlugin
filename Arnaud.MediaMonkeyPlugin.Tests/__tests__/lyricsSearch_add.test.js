@@ -82,6 +82,10 @@ describe('formatGeniusSegment', () => {
   test('strips diacritics from title (e.g. "Nü Romantics")', () => {
     expect(formatGeniusSegment('Nü Romantics')).toBe('nu-romantics');
   });
+
+  test('converts ampersand to and (e.g. "Meat & Greet" by Ice Nine Kills)', () => {
+    expect(formatGeniusSegment('Meat & Greet')).toBe('meat-and-greet');
+  });
 });
 
 // ---------------------------------------------------------------------------
