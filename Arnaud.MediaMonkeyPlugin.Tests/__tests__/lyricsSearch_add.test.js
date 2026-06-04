@@ -48,7 +48,7 @@ describe('formatGeniusSegment', () => {
 
   test('removes apostrophes (straight and curly)', () => {
     expect(formatGeniusSegment("it's alive")).toBe('its-alive');
-    expect(formatGeniusSegment('it\u2019s alive')).toBe('it\u2019s-alive');
+    expect(formatGeniusSegment('it\u2019s alive')).toBe('its-alive');
   });
 
   test('removes parentheses and curly braces', () => {
@@ -81,6 +81,10 @@ describe('formatGeniusSegment', () => {
 
   test('strips diacritics from title (e.g. "Nü Romantics")', () => {
     expect(formatGeniusSegment('Nü Romantics')).toBe('nu-romantics');
+  });
+
+  test('converts ampersand to and (e.g. "Meat & Greet" by Ice Nine Kills)', () => {
+    expect(formatGeniusSegment('Meat & Greet')).toBe('meat-and-greet');
   });
 });
 

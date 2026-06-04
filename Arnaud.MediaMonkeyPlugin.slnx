@@ -2,7 +2,6 @@
   <Folder Name="/Solution Items/">
     <File Path=".github/copilot-instructions.md" />
     <File Path=".gitignore" />
-    <File Path="Arnaud.GeniusLyrics.v1.0.0.mmip" />
     <File Path="build.ps1" />
     <File Path="README.md" />
   </Folder>
