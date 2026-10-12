@@ -55,6 +55,9 @@ rGenius.onSuccess = function (html, xml) {
             l = l.replace(/^\d+\s*Contributors[\s\S]*?Lyrics/i, '');
         }
 
+        // Drop a leading translation section when the original lyrics follow it.
+        l = l.replace(/^\[[^\]]*(?:translation|übersetzung)\][\s\S]*?(?=<br><br>\[)/i, '');
+
         l = cleanupLyrics(l);
         if (l) p = 'genius.com';
     } catch (ex) {
