@@ -23,9 +23,10 @@ npm install   # REQUIRED once before the first test run; node_modules is gitigno
 npm test      # runs jest
 ```
 - **Always run `npm install` before the first `npm test`** in a fresh checkout, or Jest will not be found.
-- Expected result: **2 test suites, 29 tests, all passing** (~0.5 s).
+- Expected result: **2 test suites, 32 tests, all passing** (~0.5 s).
 - **Known noise, NOT a failure:** Jest writes to stderr, so PowerShell wraps the output in a red `node.exe : ... NativeCommandError`. Judge success only by the `Test Suites: N passed` / `Tests: N passed` summary lines, never by the presence of red text. Exit code is 0 on success.
-- **Offline safety:** `__tests__/lyricsSearch_add.parsing.test.js` reads cached HTML fixtures from `resources/*.html`. As long as those files exist (they do), tests run fully offline. **Do NOT delete `resources/*.html`** — if a fixture is missing, that test fetches from genius.com (30 s timeout) and will fail in a no-network environment.
+- **Offline safety:** `__tests__/lyricsSearch_add.parsing.test.js` reads cached HTML fixtures from `resources/*.html`; existing Genius integration cases fetch and cache a missing HTML fixture. Keep each song-specific case paired with its expected `resources/<song>.txt` output so tests can run offline. **Do NOT delete the HTML fixtures** — a missing integration fixture triggers a Genius.com fetch (30 s timeout).
+- **New song fixtures:** Ask the user for the exact Genius URL before adding a real-song parsing test; do not guess or search for it. Once supplied, declare the URL and use `getHtml(url, fixturePath)` so the first test run fetches and caches the HTML. Keep the paired TXT as the reviewed expected output, and only store content the project is authorized to retain.
 
 ### Package the plugin (only when producing a release artifact)
 ```powershell
@@ -64,14 +65,14 @@ npm test      # runs jest
    │  ├─ moduleLoader.js                # loads source in a vm sandbox (NOT a test file)
    │  ├─ lyricsSearch_add.test.js       # unit tests (extractDivContent, formatGeniusSegment, metadata, onSuccess/onFailure)
    │  └─ lyricsSearch_add.parsing.test.js  # integration tests against cached genius.com HTML
-   └─ resources/                        # *.html input fixtures + *.txt expected lyrics — DO NOT DELETE
+   └─ resources/                        # Paired HTML input and expected TXT fixtures — DO NOT DELETE
 ```
 
 ## Source Architecture (`helpers/lyricsSearch_add.js`)
 Runs in MediaMonkey's global scope; relies on host-provided globals (`LyricsSource`, `window`, `cleanupLyrics`, `whatNext`, `requestNext`). Key members:
 - `let rGenius = new LyricsSource();` — registered via `window.lyricsSources.unshift(rGenius)` (must be the first source).
 - `function extractDivContent(html, start)` — balanced `<div>` extractor used to grab the lyrics container.
-- `rGenius.onSuccess(html, xml)` — locates `data-lyrics-container="true"`, extracts the div, removes `<svg>`, inserts `<br><br>` before each `[Section]` header, strips all tags except `<br>`, trims preamble, runs `cleanupLyrics`, then calls `whatNext(lyrics, provider)`.
+- `rGenius.onSuccess(html, xml)` — locates `data-lyrics-container="true"`, extracts the div, removes `<svg>`, inserts `<br><br>` before each `[Section]` header, strips all tags except `<br>`, trims preamble and a leading translation section, runs `cleanupLyrics`, then calls `whatNext(lyrics, provider).
 - `rGenius.onFailure(err)` — calls `requestNext()`.
 - `rGenius.host = 'https://genius.com/%artist%-%title%-lyrics'`, `rGenius.sendString = ''`, `rGenius.name = 'Genius'`.
 - `function formatGeniusSegment(s)` — assigned to both `rGenius.formatArtist` and `rGenius.formatTitle`.
@@ -80,6 +81,7 @@ Runs in MediaMonkey's global scope; relies on host-provided globals (`LyricsSour
 - `__tests__/moduleLoader.js` exposes `load(overrides)`, which runs the source in a Node `vm` context with stubbed globals: `window` (with `lyricsSources: []`), `LyricsSource` (empty ctor), `cleanupLyrics`, `whatNext`, `requestNext`. It returns `{ rGenius, extractDivContent, formatGeniusSegment, window, stubs }`.
 - Top-level `function`/`var` declarations in the source become properties of the VM context, which is how `extractDivContent` and `formatGeniusSegment` are exposed. **Any new helper you want to unit-test must be a top-level declaration** so the loader can surface it.
 - Tests inject behavior via `load({ cleanupLyrics, whatNext, requestNext })` overrides and assert on captured values.
+- Song-specific parsing tests use paired `resources/<genius-slug>.html` and `resources/<genius-slug>.txt` fixtures. The Metallica expected output omits the leading translation section; keep the fixture-backed test offline after the HTML is cached.
 
 ## Design Rules (preserve these when editing)
 - `formatURL` receives the already-substituted URL → do NOT strip characters there. Do all artist/title sanitizing in `formatArtist` / `formatTitle`.

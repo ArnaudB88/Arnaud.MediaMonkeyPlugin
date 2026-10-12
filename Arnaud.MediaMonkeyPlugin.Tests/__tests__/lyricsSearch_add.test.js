@@ -105,6 +105,10 @@ describe('rGenius.formatArtist / rGenius.formatTitle', () => {
   test('formatTitle formats song title', () => {
     expect(rGenius.formatTitle('Somebody else.')).toBe('somebody-else');
   });
+
+  test('formats Welcome Home (Sanitarium) for Genius', () => {
+    expect(rGenius.formatTitle('Welcome Home (Sanitarium)')).toBe('welcome-home-sanitarium');
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -182,6 +186,17 @@ describe('rGenius.onSuccess', () => {
     const chorusIdx = lyrics.indexOf('[Chorus]');
     expect(verseIdx).toBeGreaterThanOrEqual(0);
     expect(chorusIdx).toBeGreaterThan(verseIdx);
+  });
+
+  test('omits a leading translation block before the original lyrics', () => {
+    const html = buildHtml('[Deutsche Übersetzung]<br/>Translated sample<br/>[Verse 1]<br/>Original sample');
+    const cleanup = (l) => l
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+    const { lyrics } = runOnSuccess(html, cleanup);
+
+    expect(lyrics).toBe('[Verse 1]\nOriginal sample');
   });
 
   test('sets provider to empty string when no lyrics container found', () => {

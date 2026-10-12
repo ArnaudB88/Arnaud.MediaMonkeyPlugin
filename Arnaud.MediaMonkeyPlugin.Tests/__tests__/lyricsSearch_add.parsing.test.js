@@ -11,6 +11,9 @@ const FIXTURE_PATH_AUGUST_BURNS_RED_MARTYR = path.resolve(__dirname, '../resourc
 const GENIUS_URL_GUILT_TRIP_DUSK = 'https://genius.com/Guilt-trip-dusk-lyrics';
 const FIXTURE_PATH_GUILT_TRIP_DUSK = path.resolve(__dirname, '../resources/Guilt-trip-dusk.html');
 
+const GENIUS_URL_METALLICA_WELCOME_HOME_SANITARIUM = 'https://genius.com/Metallica-welcome-home-sanitarium-lyrics';
+const FIXTURE_PATH_METALLICA_WELCOME_HOME_SANITARIUM = path.resolve(__dirname, '../resources/Metallica-welcome-home-sanitarium-lyrics.html');
+
 /**
  * Fetches the raw HTML of a URL, following up to one redirect.
  */
@@ -93,6 +96,27 @@ describe('rGenius.onSuccess – real Genius.com HTML (August Burns Red – Marty
   test('parses all lyric sections from the Genius page', () => {
     const expectedLyrics = fs
       .readFileSync(path.resolve(__dirname, '../resources/August-burns-red-martyr-lyrics.txt'), 'utf8')
+      .replace(/\r\n/g, '\n')
+      .trim();
+
+    expect(lyrics).toBe(expectedLyrics);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Regression test – Metallica: Welcome Home (Sanitarium)
+// ---------------------------------------------------------------------------
+describe('rGenius.onSuccess – Metallica: Welcome Home (Sanitarium)', () => {
+  let lyrics;
+
+  beforeAll(async () => {
+    const html = await getHtml(GENIUS_URL_METALLICA_WELCOME_HOME_SANITARIUM, FIXTURE_PATH_METALLICA_WELCOME_HOME_SANITARIUM);
+    lyrics = parseLyrics(html);
+  }, 30_000);
+
+  test('matches the expected output fixture', () => {
+    const expectedLyrics = fs
+      .readFileSync(path.resolve(__dirname, '../resources/Metallica-welcome-home-sanitarium-lyrics.txt'), 'utf8')
       .replace(/\r\n/g, '\n')
       .trim();
 
